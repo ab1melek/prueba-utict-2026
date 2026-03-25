@@ -6,8 +6,6 @@ const envFile = `.env.${env}`;
 
 dotenv.config({ path: envFile, override: true });
 
-const timeout = 60000;
-
 const appConfig = {
   env,
   isProd: env === 'production',
@@ -15,6 +13,11 @@ const appConfig = {
   port: process.env.PORT || 3000,
 };
 
+const apiRickAndMorty = {
+  characterEndpoint: process.env.CHARACTER_ENDPOINT,
+}
+
 module.exports = {
   appConfig,
+  apiRickAndMorty,
 };

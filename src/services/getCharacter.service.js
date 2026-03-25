@@ -1,5 +1,7 @@
 const axios = require('axios');
-const { CHARACTER_ENDPOINT } = require('./constants.js');
+const { apiRickAndMorty } = require('../common/config.js');
+
+const { characterEndpoint: CHARACTER_ENDPOINT } = apiRickAndMorty;
 
 function mapCharacters(characters) {
   return characters.map((char) => ({
