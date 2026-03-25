@@ -1,0 +1,17 @@
+@hostname = {{$dotenv HOST}}
+@port = {{$dotenv PORT}}
+@baseUrl = http://{{hostname}}:{{port}}
+
+### Health Check
+GET {{baseUrl}}/api/v1
+
+
+### Devuelve todos los personajes
+GET {{baseUrl}}/api/v1/characters
+
+### Devuelve personaje por nombre
+GET {{baseUrl}}/api/v1/characters?name=Rick
+
+### Devuelve personajes por especie
+GET {{baseUrl}}/api/v1/characters?species=Human
+

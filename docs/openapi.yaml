@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+  title: Rick and Morty Characters API
+  description: API para consultar personajes de Rick and Morty
+  contact:
+    name: Edgar Daniel Sánchez Avila
+    email: edgar.sanchez@utict.unam.mx
+  version: 1.0.0
+servers:
+  - url: http://{servername}.patronato.unam.mx:{port}/api/{version}
+    description: Servidor de pruebas
+    variables:
+      servername:
+        default: dispersion-nomina-api
+        description: Servidor para la API
+      port:
+        default: '3000'
+      version:
+        default: v1
+tags:
+  - name: Characters
+    description: Operaciones para consultar personajes de Rick and Morty
+paths:
+  /characters:
+    get:
+      tags:
+        - Characters
+      summary: Obtener todos los personajes
+      description: Devuelve lista de todos los personajes de Rick and Morty
+      operationId: obtenerTodosLosPersonajes
+      responses:
+        '200':
+          $ref: '#/components/responses/characters.response'
+        '500':
+          $ref: '#/components/responses/serverError.response'
+  /characters/name:
+    get:
+      tags:
+        - Characters
+      summary: Buscar personaje por nombre
+      description: Devuelve personajes que coincidan con el nombre proporcionado
+      operationId: buscarPersonajePorNombre
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: Nombre del personaje a buscar
+          schema:
+            type: string
+            example: "Rick"
+      responses:
+        '200':
+          $ref: '#/components/responses/characters.response'
+        '400':
+          $ref: '#/components/responses/badRequest.response'
+        '500':
+          $ref: '#/components/responses/serverError.response'
+  /characters/species:
+    get:
+      tags:
+        - Characters
+      summary: Buscar personajes por especie
+      description: Devuelve personajes que coincidan con la especie proporcionada
+      operationId: buscarPersonajePorEspecie
+      parameters:
+        - name: species
+          in: query
+          required: true
+          description: Especie del personaje a buscar
+          schema:
+            type: string
+            example: "Human"
+      responses:
+        '200':
+          $ref: '#/components/responses/characters.response'
+        '400':
+          $ref: '#/components/responses/badRequest.response'
+        '500':
+          $ref: '#/components/responses/serverError.response'
+components:
+  schemas:
+    Character:
+      type: object
+      properties:
+        imagen:
+          type: string
+          format: uri
+          description: URL de la imagen del personaje
+          example: "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+        nombre:
+          type: string
+          description: Nombre del personaje
+          example: "Rick Sanchez"
+        especie:
+          type: string
+          description: Especie del personaje
+          example: "Human"
+      required:
+        - imagen
+        - nombre
+        - species
+    ErrorModel:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Código
+        message:
+          type: string
+          description: Resumen del código
+        description:
+          type: string
+          description: Descripción del código
+      required:
+        - code
+        - message
+        - description
+  responses:
+    characters.response:
+      description: Lista de personajes
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Character'
+    badRequest.response:
+      description: Bad Request - La solicitud presenta una sintaxis incorrecta
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example:
+            code: '400'
+            message: Bad Request
+            description: Malformed request syntax
+    serverError.response:
+      description: Internal Server Error - El servidor encontró una condición inesperada
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example:
+            code: '500'
+            message: Internal Server Error
+            description: Server encountered an unexpected condition

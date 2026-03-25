@@ -1,0 +1,26 @@
+{
+    "env": {
+      "es2021": true,
+      "node": true
+    },
+    "extends": ["airbnb-base"],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "import/extensions": [2, "always", { "ignorePackages": true }],
+      "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.test.js", "**/*.e2e.js"] }],
+      "max-len": ["error", { "code": 180, "ignoreUrls": true }],
+      "indent": ["error", 2]
+    },
+    "globals": {
+      "vi": true,
+      "describe": true,
+      "it": true,
+      "expect": true,
+      "beforeAll": true,
+      "afterAll": true,
+      "test": true
+    }
+}
