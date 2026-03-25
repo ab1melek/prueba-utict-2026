@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Boom = require('@hapi/boom');
 const { apiRickAndMorty } = require('../common/config.js');
 
 const { characterEndpoint: CHARACTER_ENDPOINT } = apiRickAndMorty;
@@ -20,7 +21,7 @@ async function getAllCharacters() {
     const response = await axios.get(CHARACTER_ENDPOINT);
     return mapCharacters(response.data.results);
   } catch (error) {
-    throw new Error(`Error al obtener personajes: ${error.message}`);
+    throw Boom.internal(`Error al obtener personajes: ${error.message}`);
   }
 }
 
@@ -30,11 +31,17 @@ async function getAllCharacters() {
  * @returns {Array} Array con {image, name, species}
  */
 async function getCharacterByName(name) {
+  if (!name || typeof name !== 'string') {
+    throw Boom.badRequest('El parámetro "name" es requerido y debe ser string');
+  }
   try {
-    const response = await axios.get(`${CHARACTER_ENDPOINT}/?name=${name}`);
+    const response = await axios.get(`${CHARACTER_ENDPOINT}/?name=${encodeURIComponent(name)}`);
     return mapCharacters(response.data.results);
   } catch (error) {
-    throw new Error(`Error al buscar por nombre: ${error.message}`);
+    if (error.response && error.response.status === 404) {
+      throw Boom.notFound('No se encontraron personajes con ese nombre');
+    }
+    throw Boom.internal(`Error al buscar por nombre: ${error.message}`);
   }
 }
 
@@ -44,11 +51,17 @@ async function getCharacterByName(name) {
  * @returns {Array} Array con {image, name, species}
  */
 async function getCharacterBySpecies(species) {
+  if (!species || typeof species !== 'string') {
+    throw Boom.badRequest('El parámetro "species" es requerido y debe ser string');
+  }
   try {
-    const response = await axios.get(`${CHARACTER_ENDPOINT}/?species=${species}`);
+    const response = await axios.get(`${CHARACTER_ENDPOINT}/?species=${encodeURIComponent(species)}`);
     return mapCharacters(response.data.results);
   } catch (error) {
-    throw new Error(`Error al buscar por especie: ${error.message}`);
+    if (error.response && error.response.status === 404) {
+      throw Boom.notFound('No se encontraron personajes con esa especie');
+    }
+    throw Boom.internal(`Error al buscar por especie: ${error.message}`);
   }
 }
 

@@ -6,7 +6,7 @@ const { appConfig } = require('./common/config.js');
 const {
   logErrors, notFoundHandler, errorHandler, boomErrorHandler, ormErrorHandler, clientHttpErrorHandler, schemaErrorHandler,
 } = require('./middlewares/error.handler.js');
-// const { openApiValidator } = require('./middlewares/openapi.handler.js');
+const { openApiValidator } = require('./middlewares/openapi.handler.js');
 // const { initDatabase } = require('./db/init.js');
 
 const createApp = () => {
@@ -24,7 +24,7 @@ const createApp = () => {
   app.use(json());
 
   // Validator ANTES de definir rutas (para validar requests)
-  // app.use(openApiValidator());
+  app.use(openApiValidator());
 
   // Montar rutas
   routerApi(app);

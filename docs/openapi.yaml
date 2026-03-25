@@ -3,16 +3,15 @@ info:
   title: Rick and Morty Characters API
   description: API para consultar personajes de Rick and Morty
   contact:
-    name: Edgar Daniel Sánchez Avila
-    email: edgar.sanchez@utict.unam.mx
+    name: Manuel Abimelek Castrezana Granados
+    email: abimelekcastrezana@gmail.com
   version: 1.0.0
 servers:
-  - url: http://{servername}.patronato.unam.mx:{port}/api/{version}
+  - url: http://{hostname}:{port}/api/{version}
     description: Servidor de pruebas
     variables:
-      servername:
-        default: dispersion-nomina-api
-        description: Servidor para la API
+      hostname:
+        default: localhost
       port:
         default: '3000'
       version:
@@ -26,13 +25,14 @@ paths:
       tags:
         - Characters
       summary: Obtener todos los personajes
-      description: Devuelve lista de todos los personajes de Rick and Morty
+      description: Devuelve lista de personajes de Rick and Morty
       operationId: obtenerTodosLosPersonajes
       responses:
         '200':
           $ref: '#/components/responses/characters.response'
         '500':
           $ref: '#/components/responses/serverError.response'
+
   /characters/name:
     get:
       tags:
@@ -53,8 +53,11 @@ paths:
           $ref: '#/components/responses/characters.response'
         '400':
           $ref: '#/components/responses/badRequest.response'
+        '404':
+          $ref: '#/components/responses/notFound.response'
         '500':
           $ref: '#/components/responses/serverError.response'
+
   /characters/species:
     get:
       tags:
@@ -75,8 +78,11 @@ paths:
           $ref: '#/components/responses/characters.response'
         '400':
           $ref: '#/components/responses/badRequest.response'
+        '404':
+          $ref: '#/components/responses/notFound.response'
         '500':
           $ref: '#/components/responses/serverError.response'
+
 components:
   schemas:
     Character:
@@ -98,23 +104,22 @@ components:
       required:
         - imagen
         - nombre
-        - species
+        - especie
+
     ErrorModel:
       type: object
       properties:
         code:
           type: string
-          description: Código
         message:
           type: string
-          description: Resumen del código
         description:
           type: string
-          description: Descripción del código
       required:
         - code
         - message
         - description
+
   responses:
     characters.response:
       description: Lista de personajes
@@ -124,8 +129,9 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Character'
+
     badRequest.response:
-      description: Bad Request - La solicitud presenta una sintaxis incorrecta
+      description: Bad Request
       content:
         application/json:
           schema:
@@ -133,9 +139,21 @@ components:
           example:
             code: '400'
             message: Bad Request
-            description: Malformed request syntax
+            description: Parámetros inválidos
+
+    notFound.response:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          example:
+            code: '404'
+            message: Not Found
+            description: Recurso no encontrado
+
     serverError.response:
-      description: Internal Server Error - El servidor encontró una condición inesperada
+      description: Server Error
       content:
         application/json:
           schema:
@@ -143,4 +161,4 @@ components:
           example:
             code: '500'
             message: Internal Server Error
-            description: Server encountered an unexpected condition
+            description: Error inesperado en el servidor
