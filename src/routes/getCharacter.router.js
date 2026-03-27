@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
       });
     }
 
-    let pageNum;
+    let pageNumber;
     if (page !== undefined) {
       const parsed = Number(page);
       if (!Number.isInteger(parsed) || parsed < 1) {
@@ -26,16 +26,16 @@ router.get('/', async (req, res, next) => {
           description: 'page debe ser entero >= 1',
         });
       }
-      pageNum = parsed;
+      pageNumber = parsed;
     }
 
     let result;
     if (name) {
-      result = await getCharacterByName(name, pageNum);
+      result = await getCharacterByName(name, pageNumber);
     } else if (species) {
-      result = await getCharacterBySpecies(species, pageNum);
+      result = await getCharacterBySpecies(species, pageNumber);
     } else {
-      result = await getAllCharacters(pageNum);
+      result = await getAllCharacters(pageNumber);
     }
 
     return res.status(200).json(result);
