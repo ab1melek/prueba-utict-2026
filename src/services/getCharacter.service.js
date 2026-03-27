@@ -30,7 +30,7 @@ async function getAllCharacters(page = 1) {
       prev: raw.info?.prev ?? null,
     };
 
-    return baseResponse(pagination, mapCharacters(raw.results || []));
+    return baseResponse(mapCharacters(raw.results || []), pagination);
   } catch (error) {
     throw Boom.internal(`Error al obtener personajes: ${error.message}`);
   }
@@ -50,7 +50,7 @@ async function getCharacterByName(name, page = 1) {
       prev: raw.info?.prev ?? null,
     };
 
-    return baseResponse(pagination, mapCharacters(raw.results || []));
+    return baseResponse(mapCharacters(raw.results || []), pagination);
   } catch (error) {
     if (error.isBoom) throw error;
     if (error.response?.status === 404) {
@@ -75,7 +75,7 @@ async function getCharacterBySpecies(speciesSpanish, page = 1) {
       prev: raw.info?.prev ?? null,
     };
 
-    return baseResponse(pagination, mapCharacters(raw.results || []));
+    return baseResponse(mapCharacters(raw.results || []), pagination);
   } catch (error) {
     if (error.isBoom) throw error;
     if (error.response?.status === 404) {

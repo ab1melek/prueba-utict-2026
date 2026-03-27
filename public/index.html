@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rick and Morty — Catalog</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-left">
+      <img src="./encabezado.png" alt="encabezado" class="header-logo" />
+    </div>
+    <div class="header-center">
+      <h1 class="site-title">Rick and Morty</h1>
+    </div>
+    <div class="header-right">
+      <div id="bmc-wrapper">
+        <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="ab1melek" data-color="#FFDD00" data-emoji="☕"  data-font="Cookie" data-text="Apoyar" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="controls">
+      <label for="mode">Buscar en</label>
+      <select id="mode">
+        <option value="all">All</option>
+        <option value="name">Nombre</option>
+        <option value="species">Especie</option>
+      </select>
+
+      <select id="options" style="display:none"></select>
+
+      <button id="search">Buscar</button>
+    </section>
+
+    <section id="cards-area" class="cards-area">
+      <div id="left-col" class="col"></div>
+      <div id="right-col" class="col"></div>
+    </section>
+
+    <nav class="pagination">
+      <button id="prev">Anterior</button>
+      <span id="pageInfo" class="page-info"></span>
+      <button id="next">Siguiente</button>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p style="margin: 0;">by @ab1melek • <a href="https://www.linkedin.com/in/abimelekcastrezana/" target="_blank" rel="noopener">LinkedIn</a></p>
+    </div>
+  </footer>
+
+  <!-- Audio invisible en bucle automático -->
+  <audio loop style="display:none;">
+    <source src="./Rick-and-Morty-Theme-Song.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Inyectar window.API_BASE desde el backend -->
+  <script src="/config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,18 +1,7 @@
 const { Router } = require('express');
 const { getAllCharacters, getCharacterByName, getCharacterBySpecies } = require('../services/getCharacter.service.js');
-const { NOMBRES, ESPECIES } = require('../services/constantes.js');
 
 const router = Router();
-
-// GET /catalogo/nombres - Catálogo de nombres disponibles
-router.get('/catalogo/nombres', (req, res) => {
-  res.json({ nombres: NOMBRES });
-});
-
-// GET /catalogo/especies - Catálogo de especies disponibles
-router.get('/catalogo/especies', (req, res) => {
-  res.json({ especies: Object.keys(ESPECIES) });
-});
 
 // GET / - Busca por name, species o sin filtros
 router.get('/', async (req, res, next) => {
@@ -20,21 +9,21 @@ router.get('/', async (req, res, next) => {
     const { name, species, page } = req.query;
 
     if (name && species) {
-      return res.status(400).json({ 
-        code: '400', 
-        message: 'Parámetros inválidos', 
-        description: 'Proporciona solo uno: name o species' 
+      return res.status(400).json({
+        code: '400',
+        message: 'Parámetros inválidos',
+        description: 'Proporciona solo uno: name o species'
       });
     }
 
-    let pageNum = undefined;
+    let pageNum;
     if (page !== undefined) {
       const parsed = Number(page);
       if (!Number.isInteger(parsed) || parsed < 1) {
-        return res.status(400).json({ 
-          code: '400', 
-          message: 'Parámetro page inválido', 
-          description: 'page debe ser entero >= 1' 
+        return res.status(400).json({
+          code: '400',
+          message: 'Parámetro page inválido',
+          description: 'page debe ser entero >= 1',
         });
       }
       pageNum = parsed;
