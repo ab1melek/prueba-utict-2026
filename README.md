@@ -44,6 +44,19 @@ Agregar un mejor fronend, más profesional.
 
 Sesiones y ranking mulijugador.
 
+Fotos funcionando
+---------------
+<img width="1601" height="832" alt="Captura de pantalla 2026-03-27 a la(s) 2 40 41" src="https://github.com/user-attachments/assets/ce7caa71-7fdc-4945-8e7b-dd51f132e746" />
+
+<img width="1601" height="832" alt="Captura de pantalla 2026-03-27 a la(s) 2 40 55" src="https://github.com/user-attachments/assets/57c81997-e965-4e9c-bd2e-5d5f6f0760f5" />
+
+
+<img width="1601" height="832" alt="Captura de pantalla 2026-03-27 a la(s) 2 41 08" src="https://github.com/user-attachments/assets/4bb59446-99ce-4873-ab8e-b6a65d3b65a2" />
+
+<img width="1601" height="832" alt="Captura de pantalla 2026-03-27 a la(s) 2 42 08" src="https://github.com/user-attachments/assets/e70c6f2c-1351-4a73-a25d-1b70f4813dba" />
+
+<img width="1601" height="832" alt="Captura de pantalla 2026-03-27 a la(s) 2 42 13" src="https://github.com/user-attachments/assets/ac698413-8c1b-4d3d-92ad-655c8cda0ada" />
+
 Notas
 -----
 Variables de entorno en passbolt: prueba-utict-2026_AbimelekCastrezana
