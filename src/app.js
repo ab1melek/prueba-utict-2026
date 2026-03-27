@@ -29,7 +29,10 @@ const createApp = () => {
 
   // Endpoint que inyecta la configuración pública para el front
   app.get('/config.js', (req, res) => {
-    const apiBase = process.env.API_BASE || `http://${appConfig.host}:${appConfig.port}/api/v1`;
+    // Guard against missing appConfig to avoid server-side TypeErrors
+    const fallbackHost = (appConfig && appConfig.host);
+    const fallbackPort = (appConfig && appConfig.port);
+    const apiBase = (appConfig && appConfig.apiBase);
     res.setHeader('Content-Type', 'application/javascript');
     res.send(`window.API_BASE = '${apiBase}';`);
   });

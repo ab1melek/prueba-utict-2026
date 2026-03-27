@@ -11,6 +11,7 @@ const appConfig = {
   isProd: env === 'production',
   host: process.env.HOST || 'localhost',
   port: process.env.PORT || 3000,
+  apiBase: process.env.API_BASE,
 };
 
 const apiRickAndMorty = {
