@@ -15,13 +15,14 @@
       <h1 class="site-title">Rick and Morty</h1>
     </div>
     <div class="header-right">
+      <button id="game-toggle" class="game-btn">🎮 Jugar</button>
       <div id="bmc-wrapper">
         <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="ab1melek" data-color="#FFDD00" data-emoji="☕"  data-font="Cookie" data-text="Apoyar" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
       </div>
     </div>
   </header>
 
-  <main class="main">
+  <main class="main" id="catalog-view">
     <section class="controls">
       <label for="mode">Buscar en</label>
       <select id="mode">
@@ -47,9 +48,41 @@
     </nav>
   </main>
 
+  <!-- MINIJUEGO -->
+  <div id="game-view" class="game-container" style="display:none;">
+    <div class="game-header">
+      <div class="game-stats">
+        <div class="stat">
+          <span class="stat-label">TIEMPO</span>
+          <span id="timer" class="stat-value">60</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">PUNTOS</span>
+          <span id="score" class="stat-value">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">RÉCORD</span>
+          <span id="highscore" class="stat-value">0</span>
+        </div>
+      </div>
+      <button id="back-catalog" class="back-btn">← Volver</button>
+    </div>
+    
+    <div id="game-area" class="game-area">
+      <!-- Aquí aparecerán las imágenes volando -->
+    </div>
+    
+    <div id="game-over" class="game-over" style="display:none;">
+      <h2>¡GAME OVER!</h2>
+      <p class="final-score">Puntuación: <span id="final-score">0</span></p>
+      <p class="high-score-msg" id="high-score-msg"></p>
+      <button id="play-again" class="play-btn">Jugar de nuevo</button>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-content">
-      <p style="margin: 0;">by @ab1melek • <a href="https://www.linkedin.com/in/abimelekcastrezana/" target="_blank" rel="noopener">LinkedIn</a></p>
+      <p style="margin: 0;">by <a href="https://www.linkedin.com/in/abimelekcastrezana/" target="_blank" rel="noopener">@ab1melek</a></p>
     </div>
   </footer>
 
