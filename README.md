@@ -11,12 +11,6 @@ Características principales
 - Minijuego integrado: 60 segundos contra reloj, puntuación por aciertos, récord guardado en `localStorage`.
 - Diseño dark mode con estilos responsivos y cursor personalizado.
 
-Estructura relevante
---------------------
-- `public/` — Archivos estáticos del frontend (`index.html`, `styles.css`, `app.js`).
-- `src/` — Código del backend (rutas, servicios, paginación). (Si existe en este workspace.)
-- `config.js` — Inyecta `window.API_BASE` para que el frontend consuma el backend.
-
 Ejecución local
 ---------------
 1. Instalar dependencias (desde la raíz del proyecto):
@@ -39,9 +33,7 @@ http://localhost:3000/static/index.html
 
 Notas
 -----
-- El frontend requiere que `window.API_BASE` apunte al prefijo de la API (por ejemplo `http://localhost:3000/api/v1`).
-- El minijuego guarda el récord en `localStorage` bajo la clave `rm-game-highscore`.
-- El botón de apoyo (BuyMeACoffee) queda separado y no cambia el estilo de los demás botones.
+Variables de entorno en passbolt: prueba-utict-2026_AbimelekCastrezana
 
 Contacto
 -------
