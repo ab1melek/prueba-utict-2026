@@ -4,6 +4,11 @@ Descripción
 -----------
 Este repositorio contiene un frontend minimal en HTML/CSS/JavaScript que consume un backend con endpoints inspirados en la API de Rick & Morty. Muestra un catálogo paginado de personajes y además incluye un minijuego rápido donde las imágenes de los personajes aparecen volando y el usuario debe hacerles click con un "láser" durante 60 segundos para obtener puntuación.
 
+Decisiones técnicas
+-------------------------
+- Backend de referencia
+- Frontend sencillisimo
+
 Características principales
 -------------------------
 - Catálogo paginado (10 elementos por página).
@@ -31,9 +36,21 @@ npm run dev
 http://localhost:3000/static/index.html
 ```
 
+Mejoras continuas
+---------------
+Modificar a para subirlo a vercel y poder probar con enlace publico.
+
+Agregar un mejor fronend, más profesional.
+
+Sesiones y ranking mulijugador.
+
 Notas
 -----
 Variables de entorno en passbolt: prueba-utict-2026_AbimelekCastrezana
+
+Agradecimientos
+---------------
+Gracias a mi gatito que me acompaño casi toda la noche.
 
 Contacto
 -------
