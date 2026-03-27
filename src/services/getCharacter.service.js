@@ -1,65 +1,94 @@
-const axios = require('axios');
 const Boom = require('@hapi/boom');
 const { apiRickAndMorty } = require('../common/config.js');
+const { fetchPaged } = require('./pagination.function.js');
+const { NOMBRES, ESPECIES } = require('./constantes.js');
+const baseResponse = require('./base.response.js');
 
 const { characterEndpoint: CHARACTER_ENDPOINT } = apiRickAndMorty;
+
+// Mapeo inverso: inglés -> español
+const speciesInverse = Object.fromEntries(
+  Object.entries(ESPECIES).map(([es, en]) => [en, es])
+);
 
 function mapCharacters(characters) {
   return characters.map((char) => ({
     imagen: char.image,
     nombre: char.name,
-    especie: char.species,
+    especie: speciesInverse[char.species] || char.species,
   }));
 }
 
-/**
- * Obtiene todos los personajes
- * @returns {Array} Array con {image, name, species}
- */
-async function getAllCharacters() {
+// Obtiene personajes con paginación opcional
+async function getAllCharacters(page) {
   try {
-    const response = await axios.get(CHARACTER_ENDPOINT);
-    return mapCharacters(response.data.results);
+    const params = {};
+    if (page !== undefined) params.page = page;
+    const raw = await fetchPaged(CHARACTER_ENDPOINT, params);
+    const pagination = page !== undefined
+      ? {
+          pages: raw.info?.pages ?? null,
+          next: raw.info?.next ?? null,
+          prev: raw.info?.prev ?? null,
+        }
+      : null;
+
+    return baseResponse(mapCharacters(raw.results || []), pagination);
   } catch (error) {
     throw Boom.internal(`Error al obtener personajes: ${error.message}`);
   }
 }
 
-/**
- * Busca personaje por nombre
- * @param {string} name - Nombre del personaje
- * @returns {Array} Array con {image, name, species}
- */
-async function getCharacterByName(name) {
-  if (!name || typeof name !== 'string') {
-    throw Boom.badRequest('El parámetro "name" es requerido y debe ser string');
+// Busca por nombre en catálogo válido
+async function getCharacterByName(name, page) {
+  if (!name || typeof name !== 'string' || !NOMBRES.includes(name)) {
+    throw Boom.badRequest(`Nombre inválido. Válidos: ${NOMBRES.join(', ')}`);
   }
   try {
-    const response = await axios.get(`${CHARACTER_ENDPOINT}/?name=${encodeURIComponent(name)}`);
-    return mapCharacters(response.data.results);
+    const params = { name };
+    if (page !== undefined) params.page = page;
+    const raw = await fetchPaged(CHARACTER_ENDPOINT, params);
+    const pagination = page !== undefined
+      ? {
+          pages: raw.info?.pages ?? null,
+          next: raw.info?.next ?? null,
+          prev: raw.info?.prev ?? null,
+        }
+      : null;
+
+    return baseResponse(mapCharacters(raw.results || []), pagination);
   } catch (error) {
-    if (error.response && error.response.status === 404) {
-      throw Boom.notFound('No se encontraron personajes con ese nombre');
+    if (error.isBoom) throw error;
+    if (error.response?.status === 404) {
+      throw Boom.notFound('Sin resultados para este nombre');
     }
     throw Boom.internal(`Error al buscar por nombre: ${error.message}`);
   }
 }
 
-/**
- * Busca personajes por especie
- * @param {string} species - Especie del personaje
- * @returns {Array} Array con {image, name, species}
- */
-async function getCharacterBySpecies(species) {
-  if (!species || typeof species !== 'string') {
-    throw Boom.badRequest('El parámetro "species" es requerido y debe ser string');
+// Busca por especie en catálogo válido (español -> inglés)
+async function getCharacterBySpecies(speciesSpanish, page) {
+  if (!speciesSpanish || !ESPECIES[speciesSpanish]) {
+    throw Boom.badRequest(`Especie inválida. Válidas: ${Object.keys(ESPECIES).join(', ')}`);
   }
   try {
-    const response = await axios.get(`${CHARACTER_ENDPOINT}/?species=${encodeURIComponent(species)}`);
-    return mapCharacters(response.data.results);
+    const speciesEnglish = ESPECIES[speciesSpanish];
+    const params = { species: speciesEnglish };
+    if (page !== undefined) params.page = page;
+    const raw = await fetchPaged(CHARACTER_ENDPOINT, params);
+    const pagination = page !== undefined
+      ? {
+          pages: raw.info?.pages ?? null,
+          next: raw.info?.next ?? null,
+          prev: raw.info?.prev ?? null,
+        }
+      : null;
+
+    return baseResponse(pagination, mapCharacters(raw.results || []));
   } catch (error) {
-    if (error.response && error.response.status === 404) {
-      throw Boom.notFound('No se encontraron personajes con esa especie');
+    if (error.isBoom) throw error;
+    if (error.response?.status === 404) {
+      throw Boom.notFound('Sin resultados para esta especie');
     }
     throw Boom.internal(`Error al buscar por especie: ${error.message}`);
   }

@@ -5,13 +5,25 @@
 ### Health Check
 GET {{baseUrl}}/api/v1
 
+### Catalógos
+GET {{baseUrl}}/api/v1/catalogo/nombres
+GET {{baseUrl}}/api/v1/catalogo/especies
 
 ### Devuelve todos los personajes
 GET {{baseUrl}}/api/v1/characters
 
+### Todos con paginación (página 1)
+GET {{baseUrl}}/api/v1/characters?page=10
+
 ### Devuelve personaje por nombre
-GET {{baseUrl}}/api/v1/characters/name?name=Rick
+GET {{baseUrl}}/api/v1/characters?name=Rick
+
+### Personaje por nombre, página 2
+GET {{baseUrl}}/api/v1/characters?name=Rick&page=2
 
 ### Devuelve personajes por especie
-GET {{baseUrl}}/api/v1/characters/species?species=Human
+GET {{baseUrl}}/api/v1/characters?species=Humano
+
+### Especies con paginación
+GET {{baseUrl}}/api/v1/characters?species=Humano&page=2
 

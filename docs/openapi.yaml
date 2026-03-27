@@ -1,14 +1,9 @@
 openapi: 3.0.3
 info:
   title: Rick and Morty Characters API
-  description: API para consultar personajes de Rick and Morty
-  contact:
-    name: Manuel Abimelek Castrezana Granados
-    email: abimelekcastrezana@gmail.com
   version: 1.0.0
 servers:
   - url: http://{hostname}:{port}/api/{version}
-    description: Servidor de pruebas
     variables:
       hostname:
         default: localhost
@@ -18,70 +13,93 @@ servers:
         default: v1
 tags:
   - name: Characters
-    description: Operaciones para consultar personajes de Rick and Morty
+    description: Búsqueda de personajes
+  - name: Catalogs
+    description: Catálogos de búsqueda
+
 paths:
+  /catalogo/nombres:
+    get:
+      tags:
+        - Catalogs
+      summary: Nombres disponibles
+      responses:
+        '200':
+          description: Lista de nombres
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nombres:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Rick", "Morty", "Summer", "Jerry", "Beth"]
+
+  /catalogo/especies:
+    get:
+      tags:
+        - Catalogs
+      summary: Especies disponibles
+      responses:
+        '200':
+          description: Lista de especies en español
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  especies:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Humano", "Alienigena", "Humanoide", "Criatura mitológica", "Animal", "Robot", "Cronenberg", "Enfermedad"]
+
   /characters:
     get:
       tags:
         - Characters
-      summary: Obtener todos los personajes
-      description: Devuelve lista de personajes de Rick and Morty
-      operationId: obtenerTodosLosPersonajes
-      responses:
-        '200':
-          $ref: '#/components/responses/characters.response'
-        '500':
-          $ref: '#/components/responses/serverError.response'
-
-  /characters/name:
-    get:
-      tags:
-        - Characters
-      summary: Buscar personaje por nombre
-      description: Devuelve personajes que coincidan con el nombre proporcionado
-      operationId: buscarPersonajePorNombre
+      summary: Buscar personajes
+      description: Sin filtros devuelve todos. Con name/species devuelve catálogo filtrado. 10 resultados máx por página.
       parameters:
         - name: name
           in: query
-          required: true
-          description: Nombre del personaje a buscar
           schema:
             type: string
-            example: "Rick"
-      responses:
-        '200':
-          $ref: '#/components/responses/characters.response'
-        '400':
-          $ref: '#/components/responses/badRequest.response'
-        '404':
-          $ref: '#/components/responses/notFound.response'
-        '500':
-          $ref: '#/components/responses/serverError.response'
-
-  /characters/species:
-    get:
-      tags:
-        - Characters
-      summary: Buscar personajes por especie
-      description: Devuelve personajes que coincidan con la especie proporcionada
-      operationId: buscarPersonajePorEspecie
-      parameters:
+            enum: ["Rick", "Morty", "Summer", "Jerry", "Beth"]
         - name: species
           in: query
-          required: true
-          description: Especie del personaje a buscar
           schema:
             type: string
-            example: "Human"
+            enum: ["Humano", "Alienígena", "Humanoide", "Poopybutthole", "Criatura mitológica", "Animal", "Robot", "Cronenberg", "Enfermedad"]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
       responses:
         '200':
-          $ref: '#/components/responses/characters.response'
+          description: Personajes encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Character'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                required:
+                  - data
         '400':
-          $ref: '#/components/responses/badRequest.response'
+          description: Parámetro inválido
         '404':
-          $ref: '#/components/responses/notFound.response'
+          description: Sin resultados
         '500':
-          $ref: '#/components/responses/serverError.response'
+          description: Error servidor
 
 components:
   schemas:
@@ -90,75 +108,24 @@ components:
       properties:
         imagen:
           type: string
-          format: uri
-          description: URL de la imagen del personaje
-          example: "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
         nombre:
           type: string
-          description: Nombre del personaje
-          example: "Rick Sanchez"
         especie:
           type: string
-          description: Especie del personaje
-          example: "Human"
       required:
         - imagen
         - nombre
         - especie
 
-    ErrorModel:
+    Pagination:
       type: object
       properties:
-        code:
+        pages:
+          type: integer
+          nullable: true
+        next:
           type: string
-        message:
+          nullable: true
+        prev:
           type: string
-        description:
-          type: string
-      required:
-        - code
-        - message
-        - description
-
-  responses:
-    characters.response:
-      description: Lista de personajes
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Character'
-
-    badRequest.response:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorModel'
-          example:
-            code: '400'
-            message: Bad Request
-            description: Parámetros inválidos
-
-    notFound.response:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorModel'
-          example:
-            code: '404'
-            message: Not Found
-            description: Recurso no encontrado
-
-    serverError.response:
-      description: Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorModel'
-          example:
-            code: '500'
-            message: Internal Server Error
-            description: Error inesperado en el servidor
+          nullable: true
