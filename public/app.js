@@ -335,28 +335,37 @@
     });
     
     gameArea.appendChild(target);
-    
+
+    // Evitar que el usuario pueda arrastrar la imagen (drag) y "llevarse" la foto
+    target.addEventListener('dragstart', e => e.preventDefault());
+    const imgEl = target.querySelector('img');
+    if (imgEl) {
+      imgEl.draggable = false;
+      imgEl.addEventListener('dragstart', e => e.preventDefault());
+      imgEl.style.userSelect = 'none';
+    }
+
     // Animación de movimiento
     const duration = 3000 + Math.random() * 2000; // 3-5 segundos
     const startTime = Date.now();
-    
+
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       const currentX = startX + (endX - startX) * progress;
       const currentY = startY + (endY - startY) * progress;
-      
+
       target.style.left = currentX + 'px';
       target.style.top = currentY + 'px';
-      
+
       if (progress < 1 && gameActive && target.parentElement) {
         requestAnimationFrame(animate);
       } else if (target.parentElement) {
         target.remove();
       }
     };
-    
+
     requestAnimationFrame(animate);
   }
 
