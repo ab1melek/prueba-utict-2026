@@ -72,7 +72,7 @@ paths:
           in: query
           schema:
             type: string
-            enum: ["Humano", "Alienígena", "Humanoide", "Poopybutthole", "Criatura mitológica", "Animal", "Robot", "Cronenberg", "Enfermedad"]
+            enum: ["Humano", "Alienigena", "Humanoide", "Poopybutthole", "Criatura mitológica", "Animal", "Robot", "Cronenberg", "Enfermedad"]
         - name: page
           in: query
           schema:

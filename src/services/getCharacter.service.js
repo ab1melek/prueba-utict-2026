@@ -19,44 +19,38 @@ function mapCharacters(characters) {
   }));
 }
 
-// Obtiene personajes con paginación opcional
-async function getAllCharacters(page) {
+// Obtiene personajes con paginación
+async function getAllCharacters(page = 1) {
   try {
-    const params = {};
-    if (page !== undefined) params.page = page;
+    const params = { page };
     const raw = await fetchPaged(CHARACTER_ENDPOINT, params);
-    const pagination = page !== undefined
-      ? {
-          pages: raw.info?.pages ?? null,
-          next: raw.info?.next ?? null,
-          prev: raw.info?.prev ?? null,
-        }
-      : null;
+    const pagination = {
+      pages: raw.info?.pages ?? null,
+      next: raw.info?.next ?? null,
+      prev: raw.info?.prev ?? null,
+    };
 
-    return baseResponse(mapCharacters(raw.results || []), pagination);
+    return baseResponse(pagination, mapCharacters(raw.results || []));
   } catch (error) {
     throw Boom.internal(`Error al obtener personajes: ${error.message}`);
   }
 }
 
 // Busca por nombre en catálogo válido
-async function getCharacterByName(name, page) {
+async function getCharacterByName(name, page = 1) {
   if (!name || typeof name !== 'string' || !NOMBRES.includes(name)) {
     throw Boom.badRequest(`Nombre inválido. Válidos: ${NOMBRES.join(', ')}`);
   }
   try {
-    const params = { name };
-    if (page !== undefined) params.page = page;
+    const params = { name, page };
     const raw = await fetchPaged(CHARACTER_ENDPOINT, params);
-    const pagination = page !== undefined
-      ? {
-          pages: raw.info?.pages ?? null,
-          next: raw.info?.next ?? null,
-          prev: raw.info?.prev ?? null,
-        }
-      : null;
+    const pagination = {
+      pages: raw.info?.pages ?? null,
+      next: raw.info?.next ?? null,
+      prev: raw.info?.prev ?? null,
+    };
 
-    return baseResponse(mapCharacters(raw.results || []), pagination);
+    return baseResponse(pagination, mapCharacters(raw.results || []));
   } catch (error) {
     if (error.isBoom) throw error;
     if (error.response?.status === 404) {
@@ -67,22 +61,19 @@ async function getCharacterByName(name, page) {
 }
 
 // Busca por especie en catálogo válido (español -> inglés)
-async function getCharacterBySpecies(speciesSpanish, page) {
+async function getCharacterBySpecies(speciesSpanish, page = 1) {
   if (!speciesSpanish || !ESPECIES[speciesSpanish]) {
     throw Boom.badRequest(`Especie inválida. Válidas: ${Object.keys(ESPECIES).join(', ')}`);
   }
   try {
     const speciesEnglish = ESPECIES[speciesSpanish];
-    const params = { species: speciesEnglish };
-    if (page !== undefined) params.page = page;
+    const params = { species: speciesEnglish, page };
     const raw = await fetchPaged(CHARACTER_ENDPOINT, params);
-    const pagination = page !== undefined
-      ? {
-          pages: raw.info?.pages ?? null,
-          next: raw.info?.next ?? null,
-          prev: raw.info?.prev ?? null,
-        }
-      : null;
+    const pagination = {
+      pages: raw.info?.pages ?? null,
+      next: raw.info?.next ?? null,
+      prev: raw.info?.prev ?? null,
+    };
 
     return baseResponse(pagination, mapCharacters(raw.results || []));
   } catch (error) {
