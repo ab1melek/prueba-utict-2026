@@ -22,7 +22,7 @@ GET {{baseUrl}}/api/v1/characters?name=Rick
 GET {{baseUrl}}/api/v1/characters?name=Rick&page=2
 
 ### Devuelve personajes por especie
-GET {{baseUrl}}/api/v1/characters?species=Humano
+GET {{baseUrl}}/api/v1/characters?species=JUANITO
 
 ### Especies con paginación
 GET {{baseUrl}}/api/v1/characters?species=Humano&page=2
